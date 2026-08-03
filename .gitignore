@@ -1,0 +1,52 @@
+# secrets / identity
+auth.json
+auth.json.lock
+agent_id
+
+# installer / updater / shipped product
+bin/
+downloads/
+vendor/
+bundled/
+completions/
+docs/
+README.md
+CHANGELOG.md
+CHANGELOG.json
+version.json
+.metadata_version
+marketplace-cache/
+models_cache.json
+
+# runtime / sessions / caches
+sessions/
+logs/
+memtrace/
+memory/
+relocations/
+worktrees.db
+active_sessions.json
+active_sessions.lock
+sandbox-events.jsonl
+slash-mru.json
+tip_cursor.json
+*.lock
+.config-init.lock
+hooks-paths
+managed_config.lock
+
+# local-only
+handoff/
+
+# future / other runtime
+plugins/
+workflows/
+personas/
+pager.toml
+trusted_folders.toml
+managed_config.toml
+requirements.toml
+leader.sock
+*.sock
+*.sqlite
+*.sqlite-*

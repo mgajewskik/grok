@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "exec \"$HOME/.grok/hooks/scripts/rtk-enforce.sh\"",
+            "statusMessage": "RTK rewrite check"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+# Custom sandbox profiles for Grok Build.
+# Select via config.toml:  [sandbox] profile = "grok-workspace" | "grok-strict"
+# Or one-shot:             grok --sandbox grok-strict
+#
+# Built-in bases (do NOT reuse these names for custom profiles):
+#   off | workspace | devbox | read-only | strict
+#
+# Path rules:
+#   - Use absolute paths only. ~ and $HOME are NOT expanded.
+#   - Base profile still grants CWD, ~/.grok, /tmp, /var/tmp (see extends).
+#   - Keep both profiles' read_write lists in sync (no includes in this format).
+#   - New session required after edits (sandbox is fixed for the session life).
+#
+# Optional fields on any custom profile (uncomment to use):
+#   extends            = "workspace" | "strict" | "read-only" | "devbox"
+#   restrict_network   = true|false   # block child-process network (Linux; curl/npm etc.)
+#   read_only          = ["/path"]    # extra readable, not writable
+#   read_write         = ["/path"]    # extra writable roots
+#   deny               = [...]        # kernel read+write/rename deny (secrets); see below
+#
+# --- deny (kernel-enforced secret / path block) ---
+# deny blocks READ and WRITE/RENAME for matching paths for the whole process
+# (tools, bash, grep, subagents). Stronger than [permission] deny in config.toml.
+#
+# Examples (uncomment and adjust; absolute paths or globs):
+#   deny = [
+#     "/home/mgajewskik/.ssh",
+#     "/home/mgajewskik/.gnupg",
+#     "/home/mgajewskik/.aws",
+#     "/home/mgajewskik/.config/gcloud",
+#     "**/.env",
+#     "**/.env.*",
+#     "**/*.pem",
+#     "**/*credentials*",
+#   ]
+#
+# Glob notes:
+#   - *, ?, [ ] make an entry a glob; ** spans directories (**/.env matches .env at any depth)
+#   - Relative globs are workspace-anchored; prefer absolute paths for home secrets
+#   - Linux: non-empty deny needs bubblewrap; globs match files that exist at launch
+#     (files created later may not be covered — use exact paths for must-block secrets)
+#   - macOS: globs enforced at runtime (covers files created after start)
+#
+# Verify: tail ~/.grok/sandbox-events.jsonl  (ProfileApplied / FsViolation)
+
+# ---------------------------------------------------------------------------
+# grok-workspace — daily driver: read anywhere, write CWD + temps + extra roots
+# ---------------------------------------------------------------------------
+[profiles.grok-workspace]
+extends = "workspace"
+# Child network stays allowed (workspace default). Set true to block curl/npm in shell:
+# restrict_network = true
+
+# Extra writable roots beyond CWD / ~/.grok / /tmp / /var/tmp
+read_write = [
+  "/home/mgajewskik/.cache",
+  "/home/mgajewskik/.agents/skills",
+  "/home/mgajewskik/.grok",
+  "/home/mgajewskik/.ansible",
+  "/home/mgajewskik/.local/state/mise",
+  "/home/mgajewskik/.local/share/uv",
+  "/home/mgajewskik/go/pkg",
+]
+
+# Extra read-only trees (optional):
+# read_only = ["/usr/local/share/docs"]
+
+# Kernel-block secrets even though workspace can read everywhere:
+# deny = [
+#   "/home/mgajewskik/.ssh",
+#   "/home/mgajewskik/.gnupg",
+#   "**/.env",
+#   "**/*.pem",
+# ]
+
+# ---------------------------------------------------------------------------
+# grok-strict — stay in project: read CWD + system paths only; same write roots
+# ---------------------------------------------------------------------------
+[profiles.grok-strict]
+extends = "strict"
+# Child network blocked on Linux by strict base. Set false only if you need shell net:
+restrict_network = false
+
+# mise tool installs (npx, node, codebase-memory-mcp, etc.) live outside CWD/system paths
+read_only = [
+  "/home/mgajewskik/.local/share/mise/installs",
+]
+
+read_write = [
+  "/home/mgajewskik/.npm",
+  "/home/mgajewskik/.cache",
+  "/home/mgajewskik/.agents/skills",
+  "/home/mgajewskik/.grok",
+  "/home/mgajewskik/.ansible",
+  "/home/mgajewskik/.local/state/mise",
+  "/home/mgajewskik/.local/share/uv",
+  "/home/mgajewskik/go/pkg",
+]
+
+# deny still useful under strict for secrets that live *inside* CWD or caches:
+# deny = [
+#   "**/.env",
+#   "**/*.pem",
+#   "/home/mgajewskik/.cache/secrets",
+# ]

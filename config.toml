@@ -1,0 +1,55 @@
+[cli]
+installer = "internal"
+
+[ui]
+max_thoughts_width = 120
+fork_secondary_model = "grok-4.5"
+yolo = false
+compact_mode = false
+vim_mode = true
+permission_mode = "always-approve"
+
+[memory]
+enabled = true
+
+[subagents]
+enabled = true
+
+[sandbox]
+profile = "grok-strict"
+
+[permission]
+deny = ["Bash(rm -rf *)"]
+
+[mcp_servers.context7]
+command = "npx"
+args = [
+    "-y",
+    "@upstash/context7-mcp",
+]
+enabled = true
+startup_timeout_sec = 60
+
+[mcp_servers.codebase_memory_mcp]
+command = "codebase-memory-mcp"
+args = [
+    "--ui=true",
+    "--port=9749",
+]
+enabled = true
+
+[marketplace]
+default_skills_installs_purged = true
+official_marketplace_auto_installed = true
+
+[[marketplace.sources]]
+name = "xAI Official"
+git = "https://github.com/xai-org/plugin-marketplace.git"
+
+[compat.claude]
+skills = false
+rules = false
+agents = false
+mcps = false
+hooks = false
+sessions = false
