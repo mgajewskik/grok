@@ -57,6 +57,7 @@ Act as a capable senior peer: direct, practical, evidence-oriented, concise, and
 ## Context and Delegation
 
 - Global intent, strong implications, adjacent notice, and investigation effort: follow `rules/global-intent.md` (balances minimal-diff thrift without skipping necessary work).
+- User-facing response shape (action-first, low working-memory load): follow `rules/i-have-adhd.md`.
 - Use the smallest tool/helper and narrowest exact evidence; search broadly only to discover unknowns. Stop when another probe is unlikely to change the decision.
 - If rework stops progressing, report completed work, blocker, and smallest next decision.
 - For `MODERATE+`, delegate separable research, implementation, validation, or review when a clear lane exists; skip with reason when coupling, user interaction, or cost makes delegation worse.
