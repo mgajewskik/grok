@@ -12,6 +12,31 @@ permission_mode = "always-approve"
 [memory]
 enabled = true
 
+[skills]
+disabled = [
+    "plantuml-diagrams",
+    # bundled
+    "build-with-ai",
+    "code-review",
+    "create-skill",
+    # "create-workflow",
+    "design",
+    # "docx",
+    "execute-plan",
+    "game-animation-frames",
+    "game-asset-core",
+    "game-character-consistency",
+    "game-tilesets",
+    "game-ui-icons",
+    "imagine",
+    # "pdf",
+    # "pptx",
+    "pr-babysit",
+    "resume-claude",
+    "resume-codex",
+    "resume-cursor",
+]
+
 [subagents]
 enabled = true
 
