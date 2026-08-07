@@ -60,14 +60,21 @@ Act as a capable senior peer: direct, practical, evidence-oriented, concise, and
 - User-facing response shape (action-first, low working-memory load): follow `rules/i-have-adhd.md`.
 - Use the smallest tool/helper and narrowest exact evidence; search broadly only to discover unknowns. Stop when another probe is unlikely to change the decision.
 - If rework stops progressing, report completed work, blocker, and smallest next decision.
-- For `MODERATE+`, delegate separable research, implementation, validation, or review when a clear lane exists; skip with reason when coupling, user interaction, or cost makes delegation worse.
-- Subagent types, mandatory packets, envelopes, and spawn hygiene live in `rules/subagents.md` — follow that file when spawning helpers.
+- For `MODERATE+`, delegate separable research, implementation, validation, or review when a clear lane exists; skip with reason when coupling, user interaction, or cost makes delegation worse. **PASS-gate** (below) is outside that cost-skip.
+- Subagent types, packets, envelopes, spawn hygiene, and the full **PASS-gate** loop: `rules/subagents.md`.
 
 ## Review and Learning
 
-- Automatically obtain an independent review for `MODERATE`, `COMPLEX/HIGH-IMPACT`, or significant/reviewable global config, hook, safety/security, sandbox, auth, permission, policy, public API/schema, or multi-file behavior changes. Do not ask first or complete with blockers open; if skipped, state why.
+**PASS-gate** — after non-`TRIVIAL` delivered work (code, config, rules, agents, hooks, policy, permissions, schema, CI, behavior-changing tests), before reporting done to the user:
+
+1. Spawn `reviewer` (fresh context, full packet: exact criteria, changed paths, evidence).
+2. On `Decision: FAIL` / any BLOCKER → fix → re-spawn until `Decision: PASS`.
+3. Done when `Decision: PASS`, or a **valid skip**: `TRIVIAL` (typo/formatting/no behavior risk) or explicit user waiver — state why.
+
+Full loop (NOTES, thrash stop, packet fields): `rules/subagents.md` **PASS-gate**. Use `reviewer` for this gate; use the `review` skill only when the user asks for a fixed-point branch/PR review since a ref.
+
 - Persist durable learnings only after verification, explicit correction, or user confirmation. Store only compact reusable preferences, decisions, verified error-to-solution mappings, recurring pitfalls, and resumable snapshots; never secrets or raw sensitive logs.
 
 ## Completion
 
-For non-trivial work report: files changed; criterion status; anti-criterion checks; evidence; unknowns or skipped validation; and suggested cleanup or next probe, if any.
+For non-trivial work report: files changed; criterion status; anti-criterion checks; evidence; final **PASS-gate** result (`Decision: PASS` or skip reason); unknowns or skipped validation; and suggested cleanup or next probe, if any. Completion criterion: **PASS-gate** closed (PASS or valid skip).

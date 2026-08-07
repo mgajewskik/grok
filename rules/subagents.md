@@ -14,7 +14,7 @@ For `MODERATE+` work, prefer a **named user lane** when the work is separable:
 | External / version facts | `web-researcher` | read-only | Docs, APIs, freshness-sensitive facts |
 | Bounded edits | `implementer` | write (scoped) | Owned file set, clear criteria |
 | Tests | `tester` | write tests | TDD or verification matrix |
-| Independent review | `reviewer` | read-only | Significant multi-file, security, policy, hooks, public API |
+| Independent review | `reviewer` | read-only | **PASS-gate:** post-impl Spec + Standards, fresh context |
 
 **Bundled types** (no packet required):
 
@@ -22,7 +22,7 @@ For `MODERATE+` work, prefer a **named user lane** when the work is separable:
 - `plan` — implementation planning
 - `general-purpose` — catch-all multi-step work
 
-Skip named lanes when: TRIVIAL/SIMPLE and local is faster; no separable lane; tight user Q&A; user refused; or spawn cost exceeds benefit. Report the skip reason when review would normally be mandatory.
+Skip named lanes when (except **PASS-gate**): TRIVIAL/SIMPLE and local is faster; no separable lane; tight user Q&A; user refused; or spawn cost exceeds benefit. **PASS-gate** for `reviewer` after non-`TRIVIAL` implementation is mandatory (section below).
 
 ## Mandatory delegation packet (named user agents)
 
@@ -48,11 +48,25 @@ EXPECTED_OUTPUT: <shape beyond the common envelope>
 Rules for the parent:
 
 - Assign only the C/A IDs this lane owns.
-- Do not pass raw memory dumps or broad chat history.
+- Compact CURRENT_EVIDENCE only — no raw memory dumps or broad chat history.
 - For `implementer`, list owned write paths in `SCOPE` / constraints.
 - For `tester`, set `MODE: tdd` or `verification` (default verification).
-- For `reviewer`, include changed paths and the criteria under review.
-- Never spawn `reviewer` for typo-only/TRIVIAL work; do spawn for MODERATE+ multi-file, security, config, hooks, permissions, policy, or public API/schema changes.
+
+### PASS-gate (`reviewer`) — single source for parent loop
+
+Authoritative procedure for post-implementation review. `AGENTS.md` points here.
+
+**When:** after non-`TRIVIAL` delivered implementation, before reporting done. Includes all `SIMPLE` that is not typo/formatting-only. Valid skip: `TRIVIAL` or explicit user waiver (state why).
+
+**Steps (completion = `Decision: PASS` or valid skip):**
+
+1. Spawn `reviewer` with a full packet: changed paths in SCOPE, exact CRITERIA and ANTI_CRITERIA, CURRENT_EVIDENCE (diff fixed-point or path list, tests run). Prefer fixed-point or explicit paths so the child sees the real surface.
+2. Read the envelope. On `STATUS: blocked` → repair the packet → re-spawn (step 1).
+3. On `Decision: FAIL` / `VERDICT: request-changes` / any `[BLOCKER]` → fix every blocker → re-spawn with packet updated (what changed, prior blockers addressed) → step 2.
+4. On `Decision: PASS` / `VERDICT: approve` → **PASS-gate** closed. Report NOTES optionally; NOTES alone do not re-open the loop.
+5. Stall: same blockers, no progress after two full fix+re-review cycles → stop and hand the stuck set to the user.
+
+Use the `reviewer` agent for this gate (Spec + Standards + severity live in `agents/reviewer.md`). Use the `review` skill only when the user asks for a fixed-point branch/PR review since a ref.
 
 ## Expected child envelope
 
