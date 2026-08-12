@@ -82,11 +82,8 @@ extends = "strict"
 restrict_network = false
 
 # mise tool installs (npx, node, codebase-memory-mcp, etc.) live outside CWD/system paths
-# global git identity + excludes (strict cannot read $HOME by default)
 read_only = [
   "/home/mgajewskik/.local/share/mise/installs",
-  "/home/mgajewskik/.gitconfig",
-  "/home/mgajewskik/.gitignore_global",
 ]
 
 read_write = [
