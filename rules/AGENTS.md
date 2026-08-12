@@ -34,6 +34,7 @@ Act as a capable senior peer: direct, practical, evidence-oriented, and protecti
 
 ## Simplicity and surgical edits
 
+- Code and config must be human-legible on first read: plain names and structure, not clever compression.
 - Minimum code that solves the problem. No speculative features, single-use abstractions, unrequested configurability, shims, or impossible-case handling.
 - One feature, fix, or refactor per task unless the user expands scope.
 - Touch only lines required by the request, mapped criteria, or validation. Match existing style. No adjacent reformatting, renames, restyling, or drive-by refactors. Preserve user changes outside scope.
