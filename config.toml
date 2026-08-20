@@ -13,6 +13,15 @@ compact_mode = false
 vim_mode = true
 permission_mode = "always-approve"
 
+[ui.notifications]
+method = "auto"
+condition = "unfocused"
+events = [
+    "turn_complete",
+    "approval_required",
+    "agent_error",
+]
+
 [features]
 lsp_tools = true
 
