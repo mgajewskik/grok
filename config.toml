@@ -13,6 +13,9 @@ compact_mode = false
 vim_mode = true
 permission_mode = "always-approve"
 
+[features]
+lsp_tools = true
+
 [memory]
 enabled = true
 

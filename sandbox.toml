@@ -82,8 +82,10 @@ extends = "strict"
 restrict_network = false
 
 # mise tool installs (npx, node, codebase-memory-mcp, etc.) live outside CWD/system paths
+# mason: language servers spawned via lsp.json (lua-language-server, gopls, …)
 read_only = [
   "/home/mgajewskik/.local/share/mise/installs",
+  "/home/mgajewskik/.local/share/nvim/mason",
 ]
 
 read_write = [
