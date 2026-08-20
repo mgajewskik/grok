@@ -25,6 +25,9 @@ events = [
 [features]
 lsp_tools = true
 
+[tools]
+respect_gitignore = true
+
 [memory]
 enabled = true
 
