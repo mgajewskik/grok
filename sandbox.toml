@@ -53,6 +53,7 @@ extends = "workspace"
 
 # Extra writable roots beyond CWD / ~/.grok / /tmp / /var/tmp
 read_write = [
+  "/home/mgajewskik/.local/share/mise",
   "/home/mgajewskik/.cache",
   "/home/mgajewskik/.agents/skills",
   "/home/mgajewskik/.grok",
@@ -84,7 +85,10 @@ restrict_network = false
 # mise tool installs (npx, node, codebase-memory-mcp, etc.) live outside CWD/system paths
 # mason: language servers spawned via lsp.json (lua-language-server, gopls, …)
 read_only = [
+  "/home/mgajewskik/.zinit/plugins/mise",
+  "/home/mgajewskik/.config/mise",
   "/home/mgajewskik/.local/share/mise/installs",
+  "/home/mgajewskik/.local/share/mise/shims",
   "/home/mgajewskik/.local/share/nvim/mason",
 ]
 
@@ -95,6 +99,7 @@ read_write = [
   "/home/mgajewskik/.grok",
   "/home/mgajewskik/.ansible",
   "/home/mgajewskik/.local/state/mise",
+  "/home/mgajewskik/.local/share/mise",
   "/home/mgajewskik/.local/share/uv",
   "/home/mgajewskik/go/pkg",
 ]
