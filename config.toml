@@ -65,6 +65,9 @@ profile = "grok-strict"
 [permission]
 deny = ["Bash(rm -rf *)"]
 
+[folder_trust]
+enabled = false
+
 [mcp_servers.context7]
 command = "npx"
 args = [
