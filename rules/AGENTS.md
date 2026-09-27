@@ -58,24 +58,29 @@ Default: treat targets as **production / customer-facing / unknown** unless clea
 - Prefix every shell command with `rtk` (e.g. `rtk git status`). If RTK breaks a valid command: `rtk proxy <command> ...`.
 - File tools for read/list/search/edit; shell for execution, git, package scripts, and process diagnostics.
 
-## Response shape and subagents
+## Response shape
 
 - User-facing shape: `rules/i-have-adhd.md` (action-first, low working-memory load).
-- Lanes, packets (`CRITERIA` / `ANTI_CRITERIA`), envelopes, spawn hygiene, and full PASS-gate procedure: `rules/subagents.md`.
-- For `MODERATE+`, delegate separable research, implementation, validation, or review when a clear lane exists; skip with reason when coupling, user interaction, or cost makes delegation worse. **PASS-gate is never cost-skipped.**
 
-## PASS-gate (mandatory)
+## PASS-gate
 
-After non-`TRIVIAL` delivered work (code, config, rules, agents, hooks, policy, permissions, schema, CI, behavior-changing tests), **before** telling the user it is done:
+Before saying a change is done, run one fresh-context review when behavior can break, a contract changes, or more than one file is involved.
 
-1. Spawn `reviewer` (fresh context, full packet: exact **criteria and anti-criteria**, changed paths, evidence).
-2. On FAIL / any BLOCKER → fix → re-spawn until PASS.
-3. Done only on `Decision: PASS`, or a **valid skip**: typo/formatting-only with no behavior risk, or explicit user waiver (state why).
+`spawn_subagent` starts a general-purpose child. It has no type, persona, or role argument, so `~/.grok/agents/reviewer.md` is loaded only when its body is pasted into `prompt`.
 
-Details and thrash stop: `rules/subagents.md`. Use the `review` skill only when the user asks for a fixed-point branch/PR review since a ref.
+1. Read `~/.grok/agents/reviewer.md` and copy the body below the closing frontmatter `---`.
+2. Call `spawn_subagent` with `description` `[reviewer] <3-5 words>` and `prompt` set to that body, a blank line, then the brief: what was asked, what must be true, what must not happen, which paths changed, what you claim you did.
+3. The child can write. The pasted contract keeps the review in the reply and the worktree unchanged.
+4. On FAIL or any BLOCKER: fix, then re-spawn with an updated brief until `Decision: PASS`.
+5. The same blockers after two fix-and-review rounds: stop and hand the stuck set to the user.
+6. Done on `Decision: PASS`. Skip a one-line obvious fix, a typo or formatting-only edit, or an explicit user waiver (state why). NOTES do not fail the gate.
+
+If this session's prompt already begins with that reviewer body, return the review. The parent spawns.
+
+Use the `review` skill only when the user asks for a fixed-point branch or PR review since a ref.
 
 ## Completion
 
-For non-trivial work report: files changed; criterion status; anti-criterion checks; evidence; PASS-gate result (`Decision: PASS` or skip reason); unknowns or skipped validation; leftovers or next probes. Done = PASS-gate closed (PASS or valid skip).
+When the PASS-gate applies, report: files changed; criterion status; anti-criterion checks; evidence; PASS-gate result (`Decision: PASS` or skip reason); unknowns or skipped validation; leftovers or next probes. Done = `Decision: PASS` or a stated skip.
 
 If stuck: completed work, blocker, smallest next decision.
